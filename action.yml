@@ -6,11 +6,11 @@ outputs:
     value: ${{ steps.metadata.outputs.count }}
   height:
     description: "The number of commits since the last tag"
-    value: ${{ steps.calculate-height.outputs.height }}
+    value: ${{ steps.metadata.outputs.height }}
 runs:
   using: "composite"
   steps:
-    - name: Generate Metadata
+    - name: Generate Count
       id: metadata
       shell: bash -l {0}
       run: |
@@ -18,7 +18,7 @@ runs:
           git tag | 
           wc -l   
         )"
-        if (( ${{ steps.calculate-height.outputs.count }} > 0 )); then
+        if (( ${{ steps.metadata.outputs.count }} > 0 )); then
           echo "::set-output name=height::$(git rev-list $(git describe --abbrev=0 --tags).. --count)"
         else
           echo "::set-output name=height::$(git rev-list --count)"
