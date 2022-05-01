@@ -15,7 +15,8 @@ runs:
       shell: bash
       run: |
         echo "::set-output name=count::$(git tag | echo wc -l)"
-        if (( ${{ steps.calculate-height.outputs.count }} > 0 ))
+        if (( ${{ steps.calculate-height.outputs.count }} > 0 )); then
           echo "::set-output name=height::$(git rev-list $(git describe --abbrev=0 --tags).. --count)"
         else
           echo "::set-output name=height::$(git rev-list --count)"
+        fi
