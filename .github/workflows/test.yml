@@ -15,7 +15,7 @@ jobs:
 
       - name: Test Shallow 
         id: test
-        uses: ./tag-metadata
+        uses: ./
 
       - name: Test
         run: |
