@@ -19,7 +19,9 @@ jobs:
 
       - name: Test
         run: |
-          if (( ${{ steps.test.outputs.height }} != 0 ))
+          if (( ${{ steps.test.outputs.height }} != 0 )); then
             exit 1
-          if (( ${{ steps.test.outputs.count }} != 0 ))
+          fi
+          if (( ${{ steps.test.outputs.count }} != 0 )); then
             exit 1
+          fi
