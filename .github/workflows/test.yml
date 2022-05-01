@@ -36,7 +36,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          
+
       - name: Test Full 
         id: test
         uses: ./
@@ -46,9 +46,9 @@ jobs:
           COUNT: ${{ steps.test.outputs.count }}
           HEIGHT: ${{ steps.test.outputs.height }}
         run: |
-          if (( $HEIGHT > 0 )); then
+          if (( $HEIGHT == 0 )); then
             exit 1
           fi
-          if (( $COUNT > 1 )); then
+          if (( $COUNT < 1 )); then
             exit 1
           fi
