@@ -3,22 +3,28 @@ description: 'Generate additional metadata for git tags'
 outputs:
   count: 
     description: "The number of tags"
-    value: ${{ steps.metadata.outputs.count }}
+    value: ${{ steps.count.outputs.count }}
   height:
     description: "The number of commits since the last tag"
-    value: ${{ steps.metadata.outputs.height }}
+    value: ${{ steps.height.outputs.height }}
 runs:
   using: "composite"
   steps:
     - name: Generate Count
-      id: metadata
+      id: count
       shell: bash -l {0}
       run: |
         echo "::set-output name=count::$(
           git tag | 
           wc -l   
         )"
-        if (( ${{ steps.metadata.outputs.count }} > 0 )); then
+    - name: Generate Height
+      id: height
+      shell: bash
+      env:
+          COUNT: ${{ steps.count.outputs.count }}
+      run: |
+        if (( $COUNT > 0 )); then
           echo "::set-output name=height::$(git rev-list $(git describe --abbrev=0 --tags).. --count)"
         else
           echo "::set-output name=height::$(git rev-list --count)"
