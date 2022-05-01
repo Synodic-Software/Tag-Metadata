@@ -49,6 +49,6 @@ jobs:
           if (( $HEIGHT == 0 )); then
             exit 1
           fi
-          if (( $COUNT < 1 )); then
+          if (( $COUNT == 0 )); then
             exit 1
           fi
