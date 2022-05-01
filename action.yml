@@ -14,11 +14,12 @@ runs:
       id: metadata
       shell: bash -l {0}
       run: |
-        count=$(git tag | wc -l)
-        echo "::set-output name=count::$(count)"
-        if (( $count > 0 )); then
-          height=$(git rev-list $(git describe --abbrev=0 --tags).. --count)
+        echo "::set-output name=count::$(
+          git tag | 
+          wc -l   
+        )"
+        if (( ${{ steps.calculate-height.outputs.count }} > 0 )); then
+          echo "::set-output name=height::$(git rev-list $(git describe --abbrev=0 --tags).. --count)"
         else
-          height=$(git rev-list --count)
+          echo "::set-output name=height::$(git rev-list --count)"
         fi
-        echo "::set-output name=$(height)"
