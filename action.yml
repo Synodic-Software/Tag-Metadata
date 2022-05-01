@@ -12,7 +12,7 @@ runs:
   steps:
     - name: Generate Metadata
       id: metadata
-      shell: bash
+      shell: bash -l {0}
       run: |
         echo "::set-output name=count::$(
           git tag | 
