@@ -28,3 +28,27 @@ jobs:
           if (( $COUNT != 0 )); then
             exit 1
           fi
+
+  test-full:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - name: Test Full 
+        id: test
+        uses: ./
+
+      - name: Test
+        env:
+          COUNT: ${{ steps.test.outputs.count }}
+          HEIGHT: ${{ steps.test.outputs.height }}
+        run: |
+          if (( $HEIGHT > 0 )); then
+            exit 1
+          fi
+          if (( $COUNT > 1 )); then
+            exit 1
+          fi
