@@ -1,0 +1,25 @@
+name: Test
+
+on:
+  push:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  test-shallow:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Test Shallow 
+        id: test
+        uses: actions/tag-metadata@v1
+
+      - name: Test
+        run: |
+          if (( ${{ steps.test.outputs.height }} != 0 ))
+            exit 1
+          if (( ${{ steps.test.outputs.count }} != 0 ))
+            exit 1
