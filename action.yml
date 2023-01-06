@@ -4,6 +4,9 @@ outputs:
   count: 
     description: "The number of tags"
     value: ${{ steps.count.outputs.count }}
+  tag:
+    description: "The last tag"
+    value: ${{ steps.tag.outputs.tag }}
   height:
     description: "The number of commits since the last tag"
     value: ${{ steps.height.outputs.height }}
@@ -18,14 +21,20 @@ runs:
           git tag | 
           wc -l   
         )" >> $GITHUB_OUTPUT
+    - name: Generate Count
+      id: tag
+      shell: bash
+      run: |
+        echo "tag=$(git describe --abbrev=0 --tags)" >> $GITHUB_OUTPUT
     - name: Generate Height
       id: height
       shell: bash
       env:
           COUNT: ${{ steps.count.outputs.count }}
+          TAG: ${{ steps.tag.outputs.tag }}
       run: |
         if (( $COUNT > 0 )); then
-          echo "height=$(git rev-list $(git describe --abbrev=0 --tags).. --count)" >> $GITHUB_OUTPUT
+          echo "height=$(git rev-list $TAG.. --count)" >> $GITHUB_OUTPUT
         else
           echo "height=$(git rev-list --count HEAD)" >> $GITHUB_OUTPUT
         fi
