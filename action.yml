@@ -43,7 +43,7 @@ runs:
       id: version
       shell: bash
       run: |
-        tag=${{ github.ref_name }}
+        tag=$(git describe --abbrev=0 --tags)
         version=${tag#v}
         major=${version%%.*}
         minor=${version%.*}
