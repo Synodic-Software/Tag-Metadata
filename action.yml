@@ -54,16 +54,15 @@ runs:
         echo "major=${major}" >> $GITHUB_OUTPUT
         echo "minor=${major}" >> $GITHUB_OUTPUT
         echo "patch=${major}" >> $GITHUB_OUTPUT
-        echo "next-tag=v${major}.${minor}.$((patch+1))" >> $GITHUB_OUTPUT
+        incremented=v${major}.${minor}.$((patch+1))
+        echo "next-tag=${incremented} >> $GITHUB_OUTPUT
     - name: Generate Height
       id: height
       shell: bash
-      env:
-          COUNT: ${{ steps.count.outputs.count }}
-          TAG: ${{ steps.tag.outputs.tag }}
       run: |
-        if (( $COUNT > 0 )); then
-          echo "height=$(git rev-list $TAG.. --count)" >> $GITHUB_OUTPUT
+        if (( ${{ steps.count.outputs.count }} > 0 )); then
+          tag=${{ steps.tag.outputs.tag }}
+          echo "height=$(git rev-list ${tag}.. --count)" >> $GITHUB_OUTPUT
         else
           echo "height=$(git rev-list --count HEAD)" >> $GITHUB_OUTPUT
         fi
