@@ -25,6 +25,9 @@ outputs:
   patch:
     description: "The patch version of the latest tag"
     value: ${{ steps.version.outputs.patch }}
+  next-tag:
+    description: "A tag with an incremented patch version"
+    value: ${{ steps.version.outputs.next-tag }}
 runs:
   using: "composite"
   steps:
@@ -51,6 +54,7 @@ runs:
         echo "major=${major}" >> $GITHUB_OUTPUT
         echo "minor=${major}" >> $GITHUB_OUTPUT
         echo "patch=${major}" >> $GITHUB_OUTPUT
+        echo "next-tag=v${major}.${minor}.$((patch+1))" >> $GITHUB_OUTPUT
     - name: Generate Height
       id: height
       shell: bash
