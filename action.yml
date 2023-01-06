@@ -43,7 +43,8 @@ runs:
         tag=${GITHUB_REF/refs\/tags\//}
         version=${tag#v}
         major=${version%%.*}
-        minor=${${version%.*}#*.}
+        minor=${version%.*}
+        minor=${minor#*.}
         patch=${version##*.}
         echo "tag=${tag}" >> $GITHUB_OUTPUT
         echo "version=${version}" >> $GITHUB_OUTPUT
