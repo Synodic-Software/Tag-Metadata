@@ -43,7 +43,11 @@ runs:
       id: version
       shell: bash
       run: |
-        tag=$(git describe --abbrev=0 --tags)
+        if (( ${{ steps.count.outputs.count }} > 0 )); then
+          tag=$(git describe --abbrev=0 --tags)
+        else
+          tag=v0.1.0
+        fi
         version=${tag#v}
         major=${version%%.*}
         minor=${version%.*}
@@ -54,8 +58,8 @@ runs:
         echo "major=${major}" >> $GITHUB_OUTPUT
         echo "minor=${major}" >> $GITHUB_OUTPUT
         echo "patch=${major}" >> $GITHUB_OUTPUT
-        next-tag=v${major}.${minor}.$((patch+1))
-        echo "next-tag=${next-tag}" >> $GITHUB_OUTPUT
+        incremented=v${major}.${minor}.$((patch+1))
+        echo "next-tag=${incremented}" >> $GITHUB_OUTPUT
     - name: Generate Height
       id: height
       shell: bash
