@@ -55,7 +55,7 @@ runs:
         echo "minor=${major}" >> $GITHUB_OUTPUT
         echo "patch=${major}" >> $GITHUB_OUTPUT
         incremented=v${major}.${minor}.$((patch+1))
-        echo "next-tag=${incremented} >> $GITHUB_OUTPUT
+        echo "next-tag=${incremented}" >> $GITHUB_OUTPUT
     - name: Generate Height
       id: height
       shell: bash
