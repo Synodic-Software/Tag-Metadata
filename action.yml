@@ -1,5 +1,8 @@
 name: 'Tag Metadata'
 description: 'Generate additional metadata for git tags'
+branding:
+  icon: 'git-commit'
+  color: 'blue'
 outputs:
   count: 
     description: "The number of tags"
