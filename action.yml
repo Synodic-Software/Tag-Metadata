@@ -54,9 +54,12 @@ runs:
     - name: Generate Height
       id: height
       shell: bash
+      env:
+          COUNT: ${{ steps.count.outputs.count }}
+          TAG: ${{ steps.tag.outputs.tag }}
       run: |
-        if (( ${{ steps.count.outputs.count }} > 0 )); then
-          echo "height=$(git rev-list ${{ steps.version.outputs.tag }}.. --count)" >> $GITHUB_OUTPUT
+        if (( $COUNT > 0 )); then
+          echo "height=$(git rev-list $TAG.. --count)" >> $GITHUB_OUTPUT
         else
           echo "height=$(git rev-list --count HEAD)" >> $GITHUB_OUTPUT
         fi
