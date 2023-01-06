@@ -7,12 +7,24 @@ outputs:
   count: 
     description: "The number of tags"
     value: ${{ steps.count.outputs.count }}
-  tag:
-    description: "The last tag"
-    value: ${{ steps.tag.outputs.tag }}
   height:
-    description: "The number of commits since the last tag"
-    value: ${{ steps.height.outputs.height }}
+    description: "The number of commits since the latest tag"
+    value: ${{ steps.height.outputs.height }}    
+  tag:
+    description: "The latest tag"
+    value: ${{ steps.version.outputs.tag }}
+  version:
+    description: "The semantic version of the latest tag"
+    value: ${{ steps.version.outputs.version }}
+  major:
+    description: "The major version of the latest tag"
+    value: ${{ steps.version.outputs.major }}
+  minor:
+    description: "The minor version of the latest tag"
+    value: ${{ steps.version.outputs.minor }}
+  patch:
+    description: "The patch version of the latest tag"
+    value: ${{ steps.version.outputs.patch }}
 runs:
   using: "composite"
   steps:
@@ -24,20 +36,26 @@ runs:
           git tag | 
           wc -l   
         )" >> $GITHUB_OUTPUT
-    - name: Generate Count
-      id: tag
+    - name: Version
+      id: version
       shell: bash
       run: |
-        echo "tag=$(git describe --abbrev=0 --tags)" >> $GITHUB_OUTPUT
+        tag=${GITHUB_REF/refs\/tags\//}
+        version=${tag#v}
+        major=${version%%.*}
+        minor=${${version%.*}#*.}
+        patch=${version##*.}
+        echo "tag=${tag}" >> $GITHUB_OUTPUT
+        echo "version=${version}" >> $GITHUB_OUTPUT
+        echo "major=${major}" >> $GITHUB_OUTPUT
+        echo "minor=${major}" >> $GITHUB_OUTPUT
+        echo "patch=${major}" >> $GITHUB_OUTPUT
     - name: Generate Height
       id: height
       shell: bash
-      env:
-          COUNT: ${{ steps.count.outputs.count }}
-          TAG: ${{ steps.tag.outputs.tag }}
       run: |
-        if (( $COUNT > 0 )); then
-          echo "height=$(git rev-list $TAG.. --count)" >> $GITHUB_OUTPUT
+        if (( ${{ steps.count.outputs.count }} > 0 )); then
+          echo "height=$(git rev-list ${{ steps.version.outputs.tag }}.. --count)" >> $GITHUB_OUTPUT
         else
           echo "height=$(git rev-list --count HEAD)" >> $GITHUB_OUTPUT
         fi
